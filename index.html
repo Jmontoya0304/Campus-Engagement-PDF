@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Real Money Talk — SoFi Future Wealth Summit 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bg: #201747;
+            --color-bg-deep: #140e2f;
+            --color-surface: #2c2060;
+            --color-text: #ffffff;
+            --color-text-secondary: #c8d6e5;
+            --color-text-muted: #8fa3b8;
+            --color-accent-1: #00A2C7;
+            --color-accent-2: #FED880;
+            --color-accent-3: #DD7975;
+            --color-glass-bg: rgba(255,255,255,0.06);
+            --color-glass-border: rgba(255,255,255,0.10);
+            --color-vignette: rgba(0,0,0,0.45);
+            --font-display: 'DM Serif Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+    </style>
+    <style>
+        :root { --color-bg: #201747; --color-text: #ffffff; --glow-color-rgb: 0,162,199; }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; }
+        body { font-family: 'DM Sans', sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+        .deck { width: 100vw; height: 100vh; position: relative; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 4rem); }
+        .nav-controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.10); }
+        .nav-btn { width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.06); color: #00A2C7; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(255,255,255,0.12); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #00A2C7; transform: scale(1.3); }
+        .slide-counter { font-size: 0.8rem; color: #8fa3b8; min-width: 40px; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(20px); }
+        @keyframes float-slow { 0%{transform:translate(0,0) scale(1)} 25%{transform:translate(60px,-50px) scale(1.12)} 50%{transform:translate(-40px,40px) scale(0.9)} 75%{transform:translate(50px,20px) scale(1.08)} 100%{transform:translate(0,0) scale(1)} }
+        @keyframes float-drift { 0%{transform:translate(0,0) scale(1) rotate(0deg)} 33%{transform:translate(-50px,-60px) scale(1.15) rotate(3deg)} 66%{transform:translate(40px,30px) scale(0.88) rotate(-2deg)} 100%{transform:translate(0,0) scale(1) rotate(0deg)} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 12s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 16s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 20s ease-in-out infinite reverse; }
+        .slide::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); background-size:256px 256px; opacity:0.03; mix-blend-mode:overlay; }
+        .slide::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center, transparent 50%, var(--color-vignette) 100%); }
+        .mouse-spotlight { position:fixed; inset:0; z-index:99; pointer-events:none; }
+        .eyebrow { font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#FED880; }
+        .divider-line { width:64px; height:4px; background:linear-gradient(to right,#00A2C7,#FED880); border-radius:4px; margin:1.2rem 0; }
+        .topic-pill { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(0,162,199,0.10); border:1px solid rgba(0,162,199,0.22); border-radius:999px; padding:0.45rem 1rem; font-size:0.88rem; font-weight:500; color:#a8dff0; transition:background 0.25s,border-color 0.25s; }
+        .topic-pill:hover { background:rgba(0,162,199,0.20); border-color:rgba(0,162,199,0.45); }
+        .topic-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .glass-card { background:rgba(255,255,255,0.06); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.10); border-radius:16px; padding:1.5rem; transition:transform 0.25s, box-shadow 0.25s; }
+        .glass-card:hover { transform:translateY(-4px); box-shadow:0 8px 32px rgba(0,162,199,0.15); }
+        .stat-number { font-family:'DM Serif Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:400; color:#00A2C7; line-height:1; }
+        .accent-border-card { border-left:4px solid #00A2C7; background:rgba(255,255,255,0.04); border-radius:0 12px 12px 0; padding:1rem 1.25rem; }
+        .glow-pulse { animation:glow-pulse 3s ease-in-out infinite; }
+        @keyframes glow-pulse { 0%,100%{text-shadow:0 0 20px rgba(0,162,199,0.5),0 0 40px rgba(0,162,199,0.2)} 50%{text-shadow:0 0 30px rgba(0,162,199,0.8),0 0 60px rgba(0,162,199,0.3)} }
+    </style>
+
+<style id="print-overrides">
+*, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    animation: none !important;
+    transition: none !important;
+}
+html, body {
+    background: #201747 !important;
+    overflow: visible !important;
+    height: auto !important;
+    width: 1280px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.deck {
+    position: static !important;
+    width: 1280px !important;
+    height: auto !important;
+}
+.slide {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: all !important;
+    width: 1280px !important;
+    height: 720px !important;
+    display: flex !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    background: #201747 !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+/* Kill ALL backdrop-filter — main culprit for transparency/ghosting in PDFs */
+* {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+/* Replace glass cards with fully opaque solid backgrounds */
+.glass-card {
+    background: rgba(44, 32, 96, 0.98) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+}
+/* Nav pill also opaque */
+.nav-controls {
+    display: none !important;
+}
+.mouse-spotlight {
+    display: none !important;
+}
+/* Reveal elements must be fully visible */
+.reveal {
+    opacity: 1 !important;
+    transform: none !important;
+}
+/* Blobs keep their blur (decorative, fine in PDF) */
+.blob {
+    filter: blur(80px) !important;
+}
+/* Particle canvas hidden */
+canvas.particle-canvas {
+    display: none !important;
+}
+</style>
+</head>
+<body>
+<div class="mouse-spotlight"></div>
+<div class="deck">
+
+<!-- ═══════════════════════════════ SLIDE 1: TITLE ═══════════════════════════════ -->
+<div class="slide active" data-slide="1">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:600px;height:600px;top:-150px;right:-120px;background:#00A2C7;opacity:0.12;"></div>
+        <div class="blob" style="width:400px;height:400px;bottom:-100px;left:-100px;background:#330072;opacity:0.18;"></div>
+        <div class="blob" style="width:250px;height:250px;top:40%;left:20%;background:#FED880;opacity:0.08;"></div>
+    </div>
+    <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;"></canvas>
+    <div class="content" style="text-align:center;">
+        <div class="reveal" style="font-size:80px;margin-bottom:1rem;animation:float 3s ease-in-out infinite;">💰</div>
+        <p class="eyebrow reveal" style="margin-bottom:1rem;">SoFi Future Wealth Summit · April 2026</p>
+        <h1 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:400;line-height:1.05;margin:0 0 1rem;background:linear-gradient(135deg,#00A2C7,#FED880,#00A2C7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Real Money Talk</h1>
+        <p class="reveal" style="font-size:clamp(1rem,1.8vw,1.35rem);color:#c8d6e5;letter-spacing:0.08em;font-weight:300;">6 Financial Basics Most People Learn Too Late</p>
+        
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 2: OVERVIEW (UPDATED) ═══════════════════════════════ -->
+<div class="slide" data-slide="2">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:500px;height:500px;top:-120px;right:-80px;background:#00A2C7;opacity:0.10;"></div>
+        <div class="blob" style="width:350px;height:350px;bottom:-60px;left:-80px;background:#330072;opacity:0.15;"></div>
+        <div class="blob" style="width:220px;height:220px;top:42%;left:18%;background:#FED880;opacity:0.07;"></div>
+    </div>
+    <div class="content">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;">
+            <div>
+                <p class="eyebrow reveal" style="margin-bottom:1rem;">About This Session</p>
+                <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.1;color:#fff;margin:0 0 0.5rem;">Real Money<br><span style="color:#00A2C7;">Talk.</span></h2>
+                <div class="divider-line reveal"></div>
+                <p class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2vw,1.5rem);color:#c8d6e5;line-height:1.5;margin:0 0 0.75rem;font-style:italic;">Confidence with money doesn't come from having more.</p>
+                <p class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(1.1rem,2vw,1.5rem);color:#FED880;line-height:1.5;margin:0;font-style:italic;">It comes from understanding what you already have.</p>
+            </div>
+            <div>
+                <p class="reveal" style="font-size:0.82rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#8fa3b8;margin-bottom:1.2rem;">What we'll cover</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">💰</span>How to manage your cash flow like a pro</div>
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">📈</span>Building credit before you even graduate</div>
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">🛡️</span>Creating a safety buffer for the unexpected</div>
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">🌱</span>Starting to invest — even on a student budget</div>
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">💼</span>Growing your income while you're still in school</div>
+                    <div class="topic-pill reveal"><span style="font-size:1.1rem;margin-right:0.5rem;">🎓</span>Understanding your student loans</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 3: CASH FLOW ═══════════════════════════════ -->
+<div class="slide" data-slide="3">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:450px;height:450px;top:-100px;right:-60px;background:#00A2C7;opacity:0.09;"></div>
+        <div class="blob" style="width:300px;height:300px;bottom:-80px;left:-60px;background:#FED880;opacity:0.08;"></div>
+    </div>
+    <div class="content">
+        <p class="eyebrow reveal" style="margin-bottom:0.75rem;">01 — Cash Flow</p>
+        <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 0.5rem;">Find Your <span style="color:#00A2C7;">Money Leaks</span></h2>
+        <p class="reveal" style="color:#c8d6e5;font-size:1rem;margin:0 0 1.5rem;max-width:580px;">You don't lose money all at once. You lost it slowly. Small charges compound. Quick swipes, subscriptions, and delivery apps separate you from the total.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">🔒</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.25rem;">Fixed Expenses</div>
+                <div style="font-size:0.85rem;color:#8fa3b8;">Rent, phone bill, predictable costs</div>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">🌊</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.25rem;">Variable Expenses</div>
+                <div style="font-size:0.85rem;color:#8fa3b8;">Food, transport, shopping — leaks live here</div>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">🎯</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.25rem;">The 50/30/20 Rule</div>
+                <div style="font-size:0.85rem;color:#8fa3b8;">Needs / Wants / Savings</div>
+            </div>
+        </div>
+        <div class="accent-border-card reveal" style="border-left-color:#FED880;">
+            <p style="margin:0;font-size:0.95rem;color:#FED880;font-weight:600;">Budgeting isn't a punishment — it's visibility. <span style="color:#c8d6e5;font-weight:400;">When you can see your spending, patterns become obvious. And once you find the leaks, you decide what stays.</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 4: CREDIT ═══════════════════════════════ -->
+<div class="slide" data-slide="4">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:400px;height:400px;top:-80px;left:-60px;background:#330072;opacity:0.18;"></div>
+        <div class="blob" style="width:300px;height:300px;bottom:-60px;right:-60px;background:#00A2C7;opacity:0.10;"></div>
+    </div>
+    <div class="content">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+            <div>
+                <p class="eyebrow reveal" style="margin-bottom:0.75rem;">02 — Credit</p>
+                <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 1rem;">Your Financial <span style="color:#00A2C7;">Reputation Score</span></h2>
+                <p class="reveal" style="color:#c8d6e5;font-size:1rem;line-height:1.6;margin:0 0 1.25rem;">Credit builds — or it breaks. Because small habits repeat. And small habits compound.</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div class="accent-border-card reveal"><span style="color:#00A2C7;font-weight:600;">Pay on time</span> — the single most important factor</div>
+                    <div class="accent-border-card reveal" style="border-left-color:#FED880;"><span style="color:#FED880;font-weight:600;">Keep balances low</span> — minimum payments aren't enough; <span style="font-weight:400;color:#ffffff;">Aim for credit utilization under 30%</span></div>
+                    <div class="accent-border-card reveal" style="border-left-color:#DD7975;"><span style="color:#DD7975;font-weight:600;">Know your due dates</span> — one miss can hurt your score</div>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <div class="glass-card reveal" style="padding:2rem 1.75rem;">
+                    <p style="color:#8fa3b8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 1.25rem;">Credit Utilization Explained</p>
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.4rem;">
+                        <span style="font-size:0.8rem;color:#c8d6e5;">Total credit limit</span>
+                        <span style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:#fff;">$10,000</span>
+                    </div>
+                    <div style="width:100%;height:14px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:visible;margin-bottom:0.5rem;position:relative;">
+                        <div style="width:30%;height:100%;background:linear-gradient(to right,#00A2C7,#4dd0e1);border-radius:999px;"></div>
+                        <div style="position:absolute;left:30%;top:-5px;bottom:-5px;width:2px;background:#FED880;border-radius:2px;"></div>
+                    </div>
+                    <div style="position:relative;height:1.2rem;margin-bottom:1rem;">
+                        <span style="position:absolute;left:30%;transform:translateX(-50%);font-size:0.7rem;color:#FED880;font-weight:600;">▲ 30%</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;">
+                        <div style="background:rgba(0,162,199,0.12);border:1px solid rgba(0,162,199,0.25);border-radius:10px;padding:0.75rem;">
+                            <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#00A2C7;line-height:1;">$3,000</div>
+                            <div style="font-size:0.7rem;color:#8fa3b8;margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em;">Used · 30%</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.75rem;">
+                            <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#8fa3b8;line-height:1;">$7,000</div>
+                            <div style="font-size:0.7rem;color:#8fa3b8;margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em;">Available · 70%</div>
+                        </div>
+                    </div>
+                    <div style="padding-top:0.9rem;border-top:1px solid rgba(255,255,255,0.08);">
+                        <p style="color:#FED880;font-size:0.8rem;margin:0;font-style:italic;">✓ Staying at or below 30% signals responsible use to lenders.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 5: SAFETY BUFFER ═══════════════════════════════ -->
+<div class="slide" data-slide="5">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:500px;height:500px;top:-100px;right:-80px;background:#DD7975;opacity:0.10;"></div>
+        <div class="blob" style="width:300px;height:300px;bottom:-60px;left:-40px;background:#330072;opacity:0.15;"></div>
+    </div>
+    <div class="content">
+        <p class="eyebrow reveal" style="margin-bottom:0.75rem;">03 — Safety Buffer</p>
+        <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 0.5rem;">The <span style="color:#DD7975;">Oh No Fund</span></h2>
+        <p class="reveal" style="color:#c8d6e5;font-size:1rem;margin:0 0 1.75rem;max-width:600px;">With savings, a surprise is annoying. Without savings, a surprise becomes debt. That's the only difference.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
+            <div class="glass-card reveal" style="text-align:center;border-top:3px solid rgba(0,162,199,0.4);">
+                <div class="stat-number" style="font-size:1.8rem;color:#8fa3b8;">$0</div>
+                <p style="font-size:0.8rem;color:#8fa3b8;margin:0.3rem 0 0;text-transform:uppercase;letter-spacing:0.08em;">Start Here</p>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;border-top:3px solid rgba(0,162,199,0.6);">
+                <div class="stat-number" style="font-size:1.8rem;">$100</div>
+                <p style="font-size:0.8rem;color:#8fa3b8;margin:0.3rem 0 0;text-transform:uppercase;letter-spacing:0.08em;">First Goal</p>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;border-top:3px solid rgba(0,162,199,0.8);">
+                <div class="stat-number" style="font-size:1.8rem;">$250</div>
+                <p style="font-size:0.8rem;color:#8fa3b8;margin:0.3rem 0 0;text-transform:uppercase;letter-spacing:0.08em;">Next Step</p>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;border-top:3px solid #00A2C7;">
+                <div class="stat-number glow-pulse" style="font-size:1.8rem;">$500</div>
+                <p style="font-size:0.8rem;color:#8fa3b8;margin:0.3rem 0 0;text-transform:uppercase;letter-spacing:0.08em;">Oh No Fund ✓</p>
+            </div>
+        </div>
+        <div class="accent-border-card reveal" style="border-left-color:#DD7975;">
+            <p style="margin:0;color:#c8d6e5;font-size:0.95rem;"><span style="color:#DD7975;font-weight:600;">Make it automatic.</span> Even $10–$20 at a time. Small transfers, repeated consistently, remove the decision entirely — and add up faster than you think.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 6: INVESTING ═══════════════════════════════ -->
+<div class="slide" data-slide="6">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:450px;height:450px;top:-80px;left:-80px;background:#FED880;opacity:0.08;"></div>
+        <div class="blob" style="width:350px;height:350px;bottom:-60px;right:-40px;background:#00A2C7;opacity:0.10;"></div>
+    </div>
+    <div class="content">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+            <div>
+                <p class="eyebrow reveal" style="margin-bottom:0.75rem;">04 — Investing</p>
+                <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 1rem;">Your Biggest Advantage <span style="color:#FED880;">Is Time</span></h2>
+                <p class="reveal" style="color:#c8d6e5;font-size:1rem;line-height:1.6;margin:0 0 1.25rem;">Your biggest advantage right now isn't money. It's time. Money earns returns. Then those returns earn returns. That's compound growth.</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div class="accent-border-card reveal" style="border-left-color:#FED880;"><span style="color:#FED880;font-weight:600;">ETFs & mutual funds</span> — spread risk across many companies</div>
+                    <div class="accent-border-card reveal"><span style="color:#00A2C7;font-weight:600;">Start small</span> — even a few dollars at a time counts</div>
+                    <div class="accent-border-card reveal" style="border-left-color:#DD7975;"><span style="color:#DD7975;font-weight:600;">Don't day trade</span> — consistency beats timing every time</div>
+                </div>
+            </div>
+            <div class="glass-card reveal" style="padding:2rem;text-align:center;">
+                <p style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#8fa3b8;margin:0 0 1rem;">Power of starting early</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="background:rgba(254,216,128,0.08);border:1px solid rgba(254,216,128,0.2);border-radius:10px;padding:0.75rem 1rem;text-align:left;">
+                        <span style="color:#FED880;font-weight:600;font-size:0.9rem;">Start at 20</span><span style="color:#8fa3b8;font-size:0.85rem;"> → $50/mo for 40 yrs</span>
+                        <div style="color:#FED880;font-weight:700;font-size:1.1rem;margin-top:0.2rem;">~$175,000+</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.75rem 1rem;text-align:left;">
+                        <span style="color:#c8d6e5;font-weight:600;font-size:0.9rem;">Start at 30</span><span style="color:#8fa3b8;font-size:0.85rem;"> → $50/mo for 30 yrs</span>
+                        <div style="color:#c8d6e5;font-weight:700;font-size:1.1rem;margin-top:0.2rem;">~$75,000</div>
+                    </div>
+                </div>
+                <p style="font-size:0.78rem;color:#8fa3b8;margin:1rem 0 0;font-style:italic;">Assumes 7% avg annual return.<br>For illustrative purposes only.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 7: INCOME ═══════════════════════════════ -->
+<div class="slide" data-slide="7">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:400px;height:400px;top:-80px;right:-60px;background:#330072;opacity:0.18;"></div>
+        <div class="blob" style="width:300px;height:300px;bottom:-60px;left:-40px;background:#00A2C7;opacity:0.10;"></div>
+    </div>
+    <div class="content">
+        <p class="eyebrow reveal" style="margin-bottom:0.75rem;">05 — Income</p>
+        <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 0.5rem;">Your Income <span style="color:#00A2C7;">Isn't Fixed</span></h2>
+        <p class="reveal" style="color:#c8d6e5;font-size:1rem;margin:0 0 1.5rem;max-width:620px;">We spend a lot of time managing money. But not enough time increasing it. You can influence your income — starting right now.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2.2rem;margin-bottom:0.5rem;">🎓</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.4rem;">Internships</div>
+                <div style="font-size:0.84rem;color:#8fa3b8;">Paid experience compounds early in your career, and even unpaid internships build skills and connections that pay dividends later.</div>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2.2rem;margin-bottom:0.5rem;">💡</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.4rem;">Monetize Skills</div>
+                <div style="font-size:0.84rem;color:#8fa3b8;">Freelance, tutoring, content — your skills have value</div>
+            </div>
+            <div class="glass-card reveal" style="text-align:center;">
+                <div style="font-size:2.2rem;margin-bottom:0.5rem;">🤝</div>
+                <div style="font-weight:700;color:#fff;margin-bottom:0.4rem;">Negotiate</div>
+                <div style="font-size:0.84rem;color:#8fa3b8;">$3K more at the start of your career compounds massively</div>
+            </div>
+        </div>
+        <div class="accent-border-card reveal" style="border-left-color:#FED880;">
+            <p style="margin:0;color:#c8d6e5;font-size:0.95rem;"><span style="color:#FED880;font-weight:600;">YOU are your biggest asset.</span> Not your savings account. Your earning power. Invest in that.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 8: STUDENT LOANS ═══════════════════════════════ -->
+<div class="slide" data-slide="8">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:480px;height:480px;top:-100px;left:-80px;background:#00A2C7;opacity:0.10;"></div>
+        <div class="blob" style="width:280px;height:280px;bottom:-60px;right:-40px;background:#DD7975;opacity:0.10;"></div>
+    </div>
+    <div class="content">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+            <div>
+                <p class="eyebrow reveal" style="margin-bottom:0.75rem;">06 — Student Loans</p>
+                <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin:0 0 1rem;"><span style="color:#00A2C7;">Clarity</span> Removes Fear</h2>
+                <p class="reveal" style="color:#c8d6e5;font-size:1rem;line-height:1.6;margin:0 0 1.25rem;">You don't need a full repayment strategy today. You just need to understand what you signed up for. Once you do — it becomes manageable.</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div class="accent-border-card reveal"><span style="color:#00A2C7;font-weight:600;">Know your loan type</span> — subsidized loans don't grow while you're in school, while unsubsidized loans do</div>
+                    <div class="accent-border-card reveal" style="border-left-color:#FED880;"><span style="color:#FED880;font-weight:600;">Interest compounds quietly</span> — even small amounts added over time can significantly increase your total repayment</div>
+                    <div class="accent-border-card reveal" style="border-left-color:#DD7975;"><span style="color:#DD7975;font-weight:600;">Uncertainty creates stress</span> — clarity creates control</div>
+                </div>
+            </div>
+            <div class="glass-card reveal" style="padding:2rem;">
+                <p style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#8fa3b8;margin:0 0 1.25rem;">First steps to take</p>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+                        <div style="width:24px;height:24px;border-radius:50%;background:#00A2C7;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;margin-top:1px;">1</div>
+                        <p style="margin:0;color:#c8d6e5;font-size:0.9rem;">Log in to your loan servicer and identify your loan type</p>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+                        <div style="width:24px;height:24px;border-radius:50%;background:#FED880;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#201747;flex-shrink:0;margin-top:1px;">2</div>
+                        <p style="margin:0;color:#c8d6e5;font-size:0.9rem;">Check your current balance and interest rate</p>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+                        <div style="width:24px;height:24px;border-radius:50%;background:#DD7975;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;margin-top:1px;">3</div>
+                        <p style="margin:0;color:#c8d6e5;font-size:0.9rem;">Understand when repayment starts and what you'll owe</p>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+                        <div style="width:24px;height:24px;border-radius:50%;background:#330072;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;margin-top:1px;">4</div>
+                        <p style="margin:0;color:#c8d6e5;font-size:0.9rem;">Explore refinancing options to potentially lower your rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ SLIDE 9: CTA / CLOSING ═══════════════════════════════ -->
+<div class="slide" data-slide="9">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:600px;height:600px;top:-120px;right:-100px;background:#00A2C7;opacity:0.13;"></div>
+        <div class="blob" style="width:400px;height:400px;bottom:-80px;left:-80px;background:#330072;opacity:0.18;"></div>
+        <div class="blob" style="width:250px;height:250px;top:35%;left:25%;background:#FED880;opacity:0.08;"></div>
+    </div>
+    <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;"></canvas>
+    <div class="content" style="text-align:center;">
+        <div class="reveal" style="font-size:72px;margin-bottom:1rem;animation:float 3s ease-in-out infinite;">🚀</div>
+        <p class="eyebrow reveal" style="margin-bottom:1rem;">Take One Step</p>
+        <h2 class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(2rem,4.5vw,3.5rem);line-height:1.1;margin:0 0 1rem;">You don't need to master<br>everything <span style="color:#00A2C7;">right now.</span></h2>
+        <p class="reveal" style="font-family:'DM Serif Display',serif;font-size:clamp(1rem,1.8vw,1.35rem);color:#FED880;font-style:italic;margin:0 0 2rem;">Choose one area to focus on today.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:700px;margin:0 auto 2rem;">
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/financial-insights/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">📱 Track your spending</a></div>
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/financial-insights/credit-score-monitoring/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">💳 Check your credit score</a></div>
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/financial-insights/student-loan-tracker/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">🎓 Review your loans</a></div>
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/banking/high-yield-savings-account/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">💰 Save $100 first</a></div>
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/invest/automated/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">📈 Start investing small</a></div>
+            <div class="glass-card reveal" style="padding:1rem;text-align:center;font-size:0.85rem;color:#c8d6e5;"><a href="https://sofi.com/learn/content/salary-negotiation-tactics/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">💡 Negotiate your offer</a></div>
+        </div>
+    </div>
+</div>
+
+</div><!-- end .deck -->
+
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 9</span>
+</div>
+
+<script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    for (let i = 1; i <= total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; updateNav();
+    }
+    function changeSlide(dir) { let n = current + dir; if (n < 1) n = total; if (n > total) n = 1; goToSlide(n); }
+    function updateNav() {
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current));
+        counter.textContent = current + ' / ' + total;
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); });
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight;
+            const delay = i * 0.08;
+            el.style.transition = `opacity 0.35s ease ${delay}s, transform 0.35s ease ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+    }
+    window.initParticles = function(canvas, options) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const count = options.count || 55;
+        let mx = -1000, my = -1000;
+        const particles = Array.from({length: count}, () => ({
+            x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+            vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+            size: Math.random()*2.5+0.8, alpha: Math.random()*0.35+0.1
+        }));
+        canvas.addEventListener('mousemove', e => { const r = canvas.getBoundingClientRect(); mx = e.clientX-r.left; my = e.clientY-r.top; });
+        canvas.addEventListener('mouseleave', () => { mx=-1000; my=-1000; });
+        (function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                const dx=p.x-mx, dy=p.y-my, dist=Math.sqrt(dx*dx+dy*dy);
+                if (dist < 120) { const f=(120-dist)/120*2; p.vx+=(dx/dist)*f*0.1; p.vy+=(dy/dist)*f*0.1; }
+                p.vx*=0.98; p.vy*=0.98; p.x+=p.vx; p.y+=p.vy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,162,199,${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+    document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c, {count:55}));
+    document.addEventListener('mousemove', e => {
+        const s = document.querySelector('.mouse-spotlight');
+        if (s) s.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(0,162,199,0.06), transparent 40%)`;
+    });
+    try { animateSlide(document.querySelector('.slide.active')); } catch(e) {}
+</script>
+
+<script>
+// Override GSAP/animation libraries & show all slides immediately
+window._PDF_MODE = true;
+window.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.slide').forEach(function(s) {
+        s.style.cssText += ';opacity:1!important;transform:none!important;position:relative!important;pointer-events:all!important;';
+    });
+    document.querySelectorAll('.reveal').forEach(function(el) {
+        el.style.cssText += ';opacity:1!important;transform:none!important;';
+    });
+    var nav = document.querySelector('.nav-controls');
+    if (nav) nav.style.display = 'none';
+    var spot = document.querySelector('.mouse-spotlight');
+    if (spot) spot.style.display = 'none';
+    document.querySelectorAll('canvas.particle-canvas').forEach(function(c){ c.style.display='none'; });
+});
+</script>
+</body>
+</html>
